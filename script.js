@@ -1,17 +1,14 @@
+// Toggle Navigation Section
+function toggleNavSection(button) {
+    const items = button.nextElementSibling;
+    if (items && items.classList.contains('nav-section-items')) {
+        items.classList.toggle('collapsed');
+        button.classList.toggle('collapsed');
+    }
+}
+
 // Navigation
 function navigateTo(page) {
-    // Hide all pages
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    
-    // Show selected page
-    const pageElement = document.getElementById(`${page}-page`);
-    if (pageElement) {
-        pageElement.classList.add('active');
-    } else {
-        // If page doesn't exist, render it dynamically
-        renderPageContent(page);
-    }
-    
     // Update active nav item
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
@@ -30,10 +27,13 @@ function navigateTo(page) {
     
     // Scroll to top
     window.scrollTo(0, 0);
+    
+    // Render page content
+    renderPageContent(page);
 }
 
 function renderPageContent(page) {
-    const pageContent = document.querySelector('.page-content');
+    const contentMain = document.querySelector('.content-main');
     let html = '';
 
     switch(page) {
@@ -98,7 +98,7 @@ function renderPageContent(page) {
             html = '<div class="empty-state"><i class="fas fa-inbox"></i><p>Página não encontrada</p></div>';
     }
 
-    pageContent.innerHTML = html;
+    contentMain.innerHTML = html;
     
     // Re-attach event listeners for modals
     attachModalListeners();
@@ -129,147 +129,29 @@ function closeModal(modalId) {
     }
 }
 
-// Dashboard Page
-function renderDashboardPage() {
-    const animals = db.getAnimals();
-    const weights = db.getWeights();
-    const vaccines = db.getVaccines();
-    const unreadAlerts = db.getUnreadAlerts();
-    
-    const avgWeight = weights.length > 0 ? (weights.reduce((sum, w) => sum + parseFloat(w.weight || 0), 0) / weights.length).toFixed(2) : 0;
-    
-    return `
-        <div class="page-header">
-            <h1>Bem-vindo ao Farm PRO!</h1>
-            <p>Gerencie sua fazenda de forma eficiente</p>
-        </div>
+// Sidebar Toggle
+const sidebarToggle = document.getElementById('sidebarToggle');
+const sidebarToggleMobile = document.getElementById('sidebarToggleMobile');
+const sidebar = document.querySelector('.sidebar');
 
-        <!-- Hero Section -->
-        <div class="hero-section">
-            <img src="https://images.unsplash.com/photo-1500595046891-e51e7dd6d9d9?w=1200&h=400&fit=crop" alt="Fazenda">
-        </div>
-
-        <!-- Stats Grid -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    <i class="fas fa-cow"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-label">Total de Animais</div>
-                    <div class="stat-value">${animals.length}</div>
-                    <div class="stat-change">+${Math.floor(animals.length * 0.1)} Hoje</div>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                    <i class="fas fa-weight"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-label">Peso Médio</div>
-                    <div class="stat-value">${avgWeight} kg</div>
-                    <div class="stat-change">+2.5% vs mês</div>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                    <i class="fas fa-syringe"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-label">Vacinação</div>
-                    <div class="stat-value">95%</div>
-                    <div class="stat-change">Atualizado</div>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-label">Lucratividade</div>
-                    <div class="stat-value">+18%</div>
-                    <div class="stat-change">Este mês</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-            <h2>Ações Rápidas</h2>
-            <div class="actions-grid">
-                <button class="action-btn" onclick="navigateTo('animals')">
-                    <i class="fas fa-plus"></i>
-                    <span>Adicionar Animal</span>
-                </button>
-                <button class="action-btn" onclick="navigateTo('weight')">
-                    <i class="fas fa-weight"></i>
-                    <span>Registrar Peso</span>
-                </button>
-                <button class="action-btn" onclick="navigateTo('vaccines')">
-                    <i class="fas fa-syringe"></i>
-                    <span>Vacinar</span>
-                </button>
-                <button class="action-btn" onclick="navigateTo('events')">
-                    <i class="fas fa-calendar"></i>
-                    <span>Novo Evento</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Alerts Section -->
-        ${unreadAlerts > 0 ? `
-            <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--warning);">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-exclamation-circle" style="font-size: 20px; color: var(--warning);"></i>
-                    <div>
-                        <strong>Você tem ${unreadAlerts} alerta(s) não lido(s)</strong>
-                        <p style="margin: 5px 0 0 0; color: var(--text-secondary); font-size: 14px;">Clique para visualizar</p>
-                    </div>
-                    <button class="btn-secondary btn-sm" onclick="navigateTo('alerts')" style="margin-left: auto;">Ver Alertas</button>
-                </div>
-            </div>
-        ` : ''}
-
-        <!-- Recent Activity -->
-        <div class="recent-activity">
-            <h2>Atividade Recente</h2>
-            <div class="activity-list">
-                <div class="activity-item">
-                    <div class="activity-avatar">JS</div>
-                    <div class="activity-content">
-                        <div class="activity-title">João Silva verificou ${animals.length} animais</div>
-                        <div class="activity-time">5 min atrás</div>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-avatar">AS</div>
-                    <div class="activity-content">
-                        <div class="activity-title">Ana registrou ${vaccines.length} vacinas</div>
-                        <div class="activity-time">2 horas atrás</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
+if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+    });
 }
 
-// Sidebar Toggle
-document.getElementById('sidebarToggle')?.addEventListener('click', () => {
-    const sidebar = document.querySelector('.sidebar');
-    sidebar.classList.toggle('active');
-});
+if (sidebarToggleMobile) {
+    sidebarToggleMobile.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+    });
+}
 
 // Close sidebar when clicking outside on mobile
 document.addEventListener('click', (e) => {
-    const sidebar = document.querySelector('.sidebar');
-    const toggle = document.getElementById('sidebarToggle');
-    
     if (window.innerWidth <= 768 && 
         !sidebar?.contains(e.target) && 
-        !toggle?.contains(e.target)) {
+        !sidebarToggle?.contains(e.target) &&
+        !sidebarToggleMobile?.contains(e.target)) {
         sidebar?.classList.remove('active');
     }
 });
@@ -296,11 +178,19 @@ document.addEventListener('click', (e) => {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    // Add sample data first
+    addSampleData();
+    
     // Set default page
     navigateTo('dashboard');
     
     // Update notification badge
     updateNotificationBadge();
+    
+    // Show mobile toggle on small screens
+    if (window.innerWidth <= 768) {
+        sidebarToggleMobile.style.display = 'block';
+    }
     
     // Add keyboard shortcuts
     document.addEventListener('keydown', (e) => {
@@ -323,9 +213,11 @@ function updateNotificationBadge() {
 
 // Responsive sidebar on resize
 window.addEventListener('resize', () => {
-    const sidebar = document.querySelector('.sidebar');
     if (window.innerWidth > 768) {
         sidebar?.classList.remove('active');
+        sidebarToggleMobile.style.display = 'none';
+    } else {
+        sidebarToggleMobile.style.display = 'block';
     }
 });
 
@@ -375,6 +267,3 @@ function addSampleData() {
         });
     }
 }
-
-// Load sample data
-addSampleData();

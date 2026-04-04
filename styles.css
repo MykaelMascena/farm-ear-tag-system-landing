@@ -111,13 +111,49 @@ body {
     margin-bottom: 10px;
 }
 
+.nav-section-collapsible {
+    margin-bottom: 0;
+}
+
 .nav-section-title {
-    padding: 8px 20px;
-    font-size: 11px;
-    font-weight: 600;
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 12px;
+    font-weight: 700;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.7);
     letter-spacing: 0.5px;
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+}
+
+.nav-section-title:hover {
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.nav-section-title i {
+    transition: transform 0.3s ease;
+    font-size: 12px;
+}
+
+.nav-section-items {
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.nav-section-items.collapsed {
+    max-height: 0;
+}
+
+.nav-section-title.collapsed i {
+    transform: rotate(-90deg);
 }
 
 .nav-item {
@@ -154,6 +190,14 @@ body {
 }
 
 .sidebar.collapsed .nav-section-title {
+    padding: 12px 10px;
+}
+
+.sidebar.collapsed .nav-section-title span {
+    display: none;
+}
+
+.sidebar.collapsed .nav-section-items {
     display: none;
 }
 
