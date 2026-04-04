@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm PRO - Sistema de Controle de Rebanho</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-leaf"></i>
+                    <span>Farm PRO</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-th"></i>
+                    <span>Dashboard</span>
+                </a>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Rebanho</div>
+                    <a href="#animals" class="nav-item" data-page="animals">
+                        <i class="fas fa-cow"></i>
+                        <span>Animais</span>
+                    </a>
+                    <a href="#weight" class="nav-item" data-page="weight">
+                        <i class="fas fa-weight"></i>
+                        <span>Pesos</span>
+                    </a>
+                    <a href="#vaccines" class="nav-item" data-page="vaccines">
+                        <i class="fas fa-syringe"></i>
+                        <span>Vacinas</span>
+                    </a>
+                    <a href="#events" class="nav-item" data-page="events">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Eventos</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Análise</div>
+                    <a href="#insights" class="nav-item" data-page="insights">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Gráficos</span>
+                    </a>
+                    <a href="#weight-comparison" class="nav-item" data-page="weight-comparison">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Comparativo</span>
+                    </a>
+                    <a href="#profit-simulator" class="nav-item" data-page="profit-simulator">
+                        <i class="fas fa-calculator"></i>
+                        <span>Simulador</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Cadastros</div>
+                    <a href="#producers" class="nav-item" data-page="producers">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Produtores</span>
+                    </a>
+                    <a href="#clients" class="nav-item" data-page="clients">
+                        <i class="fas fa-users"></i>
+                        <span>Clientes</span>
+                    </a>
+                    <a href="#suppliers" class="nav-item" data-page="suppliers">
+                        <i class="fas fa-truck"></i>
+                        <span>Fornecedores</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Operações</div>
+                    <a href="#incoming-notes" class="nav-item" data-page="incoming-notes">
+                        <i class="fas fa-file-import"></i>
+                        <span>Notas Entrada</span>
+                    </a>
+                    <a href="#sales-contracts" class="nav-item" data-page="sales-contracts">
+                        <i class="fas fa-file-contract"></i>
+                        <span>Contratos</span>
+                    </a>
+                    <a href="#nfe-operations" class="nav-item" data-page="nfe-operations">
+                        <i class="fas fa-receipt"></i>
+                        <span>NF-e</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Ferramentas</div>
+                    <a href="#search" class="nav-item" data-page="search">
+                        <i class="fas fa-search"></i>
+                        <span>Busca</span>
+                    </a>
+                    <a href="#reports" class="nav-item" data-page="reports">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Relatórios</span>
+                    </a>
+                    <a href="#alerts" class="nav-item" data-page="alerts">
+                        <i class="fas fa-bell"></i>
+                        <span>Alertas</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#settings" class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Configurações</span>
+                </a>
+                <a href="#profile" class="nav-item" data-page="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Perfil</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar...">
+                </div>
+                <div class="top-bar-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <div class="user-profile">
+                        <div class="avatar">JS</div>
+                        <span class="user-name">João Silva</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Dashboard Page -->
+                <div id="dashboard-page" class="page active">
+                    <div class="page-header">
+                        <h1>Bem-vindo ao Farm PRO!</h1>
+                        <p>Gerencie sua fazenda de forma eficiente</p>
+                    </div>
+
+                    <!-- Hero Section -->
+                    <div class="hero-section">
+                        <img src="https://images.unsplash.com/photo-1500595046891-e51e7dd6d9d9?w=1200&h=400&fit=crop" alt="Fazenda">
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="fas fa-cow"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">Total de Animais</div>
+                                <div class="stat-value">320</div>
+                                <div class="stat-change">+4 Hoje</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                <i class="fas fa-weight"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">Peso Médio</div>
+                                <div class="stat-value">450 kg</div>
+                                <div class="stat-change">+2.5% vs mês</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                <i class="fas fa-syringe"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">Vacinação</div>
+                                <div class="stat-value">95%</div>
+                                <div class="stat-change">Atualizado</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">Lucratividade</div>
+                                <div class="stat-value">+18%</div>
+                                <div class="stat-change">Este mês</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <h2>Ações Rápidas</h2>
+                        <div class="actions-grid">
+                            <button class="action-btn" onclick="navigateTo('animals')">
+                                <i class="fas fa-plus"></i>
+                                <span>Adicionar Animal</span>
+                            </button>
+                            <button class="action-btn" onclick="navigateTo('weight')">
+                                <i class="fas fa-weight"></i>
+                                <span>Registrar Peso</span>
+                            </button>
+                            <button class="action-btn" onclick="navigateTo('vaccines')">
+                                <i class="fas fa-syringe"></i>
+                                <span>Vacinar</span>
+                            </button>
+                            <button class="action-btn" onclick="navigateTo('events')">
+                                <i class="fas fa-calendar"></i>
+                                <span>Novo Evento</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="recent-activity">
+                        <h2>Atividade Recente</h2>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-avatar">JS</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">João Silva verificou 45 vacas</div>
+                                    <div class="activity-time">5 min atrás</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-avatar">AS</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Ana adicionou 20 galinhas</div>
+                                    <div class="activity-time">2 horas atrás</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Animals Page -->
+                <div id="animals-page" class="page">
+                    <div class="page-header">
+                        <h1>Gerenciamento de Animais</h1>
+                        <button class="btn-primary" onclick="showModal('addAnimal')">
+                            <i class="fas fa-plus"></i> Adicionar Animal
+                        </button>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-cow"></i>
+                        <p>Página de Animais - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Weight Page -->
+                <div id="weight-page" class="page">
+                    <div class="page-header">
+                        <h1>Controle de Pesos</h1>
+                        <button class="btn-primary" onclick="showModal('addWeight')">
+                            <i class="fas fa-plus"></i> Registrar Peso
+                        </button>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-weight"></i>
+                        <p>Página de Pesos - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Vaccines Page -->
+                <div id="vaccines-page" class="page">
+                    <div class="page-header">
+                        <h1>Controle de Vacinas</h1>
+                        <button class="btn-primary" onclick="showModal('addVaccine')">
+                            <i class="fas fa-plus"></i> Registrar Vacina
+                        </button>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-syringe"></i>
+                        <p>Página de Vacinas - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Events Page -->
+                <div id="events-page" class="page">
+                    <div class="page-header">
+                        <h1>Eventos Sanitários</h1>
+                        <button class="btn-primary" onclick="showModal('addEvent')">
+                            <i class="fas fa-plus"></i> Novo Evento
+                        </button>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-calendar-alt"></i>
+                        <p>Página de Eventos - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Insights Page -->
+                <div id="insights-page" class="page">
+                    <div class="page-header">
+                        <h1>Análise de Dados</h1>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-chart-line"></i>
+                        <p>Página de Gráficos - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Weight Comparison Page -->
+                <div id="weight-comparison-page" class="page">
+                    <div class="page-header">
+                        <h1>Comparativo de Pesos</h1>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-chart-bar"></i>
+                        <p>Página de Comparativo - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Profit Simulator Page -->
+                <div id="profit-simulator-page" class="page">
+                    <div class="page-header">
+                        <h1>Simulador de Lucro</h1>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-calculator"></i>
+                        <p>Página de Simulador - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Producers Page -->
+                <div id="producers-page" class="page">
+                    <div class="page-header">
+                        <h1>Gerenciamento de Produtores</h1>
+                        <button class="btn-primary" onclick="showModal('addProducer')">
+                            <i class="fas fa-plus"></i> Novo Produtor
+                        </button>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-user-tie"></i>
+                        <p>Página de Produtores - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Clients Page -->
+                <div id="clients-page" class="page">
+                    <div class="page-header">
+                        <h1>Gerenciamento de Clientes</h1>
+                        <button class="btn-primary" onclick="showModal('addClient')">
+                            <i class="fas fa-plus"></i> Novo Cliente
+                        </button>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-users"></i>
+                        <p>Página de Clientes - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Suppliers Page -->
+                <div id="suppliers-page" class="page">
+                    <div class="page-header">
+                        <h1>Gerenciamento de Fornecedores</h1>
+                        <button class="btn-primary" onclick="showModal('addSupplier')">
+                            <i class="fas fa-plus"></i> Novo Fornecedor
+                        </button>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-truck"></i>
+                        <p>Página de Fornecedores - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Incoming Notes Page -->
+                <div id="incoming-notes-page" class="page">
+                    <div class="page-header">
+                        <h1>Notas de Entrada</h1>
+                        <button class="btn-primary" onclick="showModal('addIncomingNote')">
+                            <i class="fas fa-plus"></i> Nova Nota
+                        </button>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-file-import"></i>
+                        <p>Página de Notas de Entrada - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Sales Contracts Page -->
+                <div id="sales-contracts-page" class="page">
+                    <div class="page-header">
+                        <h1>Contratos de Venda</h1>
+                        <button class="btn-primary" onclick="showModal('addContract')">
+                            <i class="fas fa-plus"></i> Novo Contrato
+                        </button>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-file-contract"></i>
+                        <p>Página de Contratos - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- NF-e Operations Page -->
+                <div id="nfe-operations-page" class="page">
+                    <div class="page-header">
+                        <h1>Operações NF-e</h1>
+                        <button class="btn-primary" onclick="showModal('addOperation')">
+                            <i class="fas fa-plus"></i> Nova Operação
+                        </button>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-receipt"></i>
+                        <p>Página de Operações NF-e - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Search Page -->
+                <div id="search-page" class="page">
+                    <div class="page-header">
+                        <h1>Busca Avançada</h1>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-search"></i>
+                        <p>Página de Busca - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Reports Page -->
+                <div id="reports-page" class="page">
+                    <div class="page-header">
+                        <h1>Relatórios</h1>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-file-pdf"></i>
+                        <p>Página de Relatórios - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Alerts Page -->
+                <div id="alerts-page" class="page">
+                    <div class="page-header">
+                        <h1>Alertas e Notificações</h1>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-bell"></i>
+                        <p>Página de Alertas - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div id="settings-page" class="page">
+                    <div class="page-header">
+                        <h1>Configurações</h1>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-cog"></i>
+                        <p>Página de Configurações - Em desenvolvimento</p>
+                    </div>
+                </div>
+
+                <!-- Profile Page -->
+                <div id="profile-page" class="page">
+                    <div class="page-header">
+                        <h1>Meu Perfil</h1>
+                    </div>
+                    <div class="content-placeholder">
+                        <i class="fas fa-user"></i>
+                        <p>Página de Perfil - Em desenvolvimento</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
