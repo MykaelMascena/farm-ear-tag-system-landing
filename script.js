@@ -94,6 +94,15 @@ function renderPageContent(page) {
         case 'nfe-operations':
             html = renderNfeOperationsPage();
             break;
+        case 'users':
+            html = renderUsersPage();
+            break;
+        case 'permissions':
+            html = renderPermissionsPage();
+            break;
+        case 'change-password':
+            html = renderChangePasswordPage();
+            break;
         default:
             html = '<div class="empty-state"><i class="fas fa-inbox"></i><p>Página não encontrada</p></div>';
     }

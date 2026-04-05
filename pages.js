@@ -1793,3 +1793,278 @@ function renderNfeOperationsPage() {
 
     return html;
 }
+
+
+// Users Page
+function renderUsersPage() {
+    const users = db.getUsers ? db.getUsers() : [];
+    
+    return `
+        <div class="page-header">
+            <h1>Cadastro de Usuários</h1>
+            <button class="btn-primary" onclick="openModal('addUserModal')">
+                <i class="fas fa-plus"></i> Adicionar Usuário
+            </button>
+        </div>
+
+        ${users.length === 0 ? `
+            <div class="empty-state">
+                <i class="fas fa-users"></i>
+                <h3>Nenhum usuário cadastrado</h3>
+                <p>Clique em "Adicionar Usuário" para começar</p>
+            </div>
+        ` : `
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Grupo</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${users.map(user => `
+                            <tr>
+                                <td><strong>${user.name}</strong></td>
+                                <td>${user.email}</td>
+                                <td>${user.group || 'Sem grupo'}</td>
+                                <td><span class="badge ${user.active ? 'badge-success' : 'badge-danger'}">${user.active ? 'Ativo' : 'Inativo'}</span></td>
+                                <td>
+                                    <button class="btn-secondary btn-sm" onclick="editUser(${user.id})">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-danger btn-sm" onclick="deleteUser(${user.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `}
+
+        <!-- Add User Modal -->
+        <div class="modal" id="addUserModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-user-plus"></i> Novo Usuário</h2>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form onsubmit="saveUser(event)">
+                        <div class="form-group">
+                            <label>Nome</label>
+                            <input type="text" id="userName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="userEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Grupo</label>
+                            <select id="userGroup">
+                                <option value="">Selecione um grupo</option>
+                                <option value="admin">Administrador</option>
+                                <option value="manager">Gerenciador</option>
+                                <option value="user">Usuário</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Senha</label>
+                            <input type="password" id="userPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="userActive" checked>
+                                Ativo
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-primary">Salvar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Permissions Page
+function renderPermissionsPage() {
+    const permissions = db.getPermissions ? db.getPermissions() : [];
+    
+    return `
+        <div class="page-header">
+            <h1>Grupo de Permissões</h1>
+            <button class="btn-primary" onclick="openModal('addPermissionModal')">
+                <i class="fas fa-plus"></i> Novo Grupo
+            </button>
+        </div>
+
+        <div class="grid-2" style="margin-bottom: 30px;">
+            ${permissions.length === 0 ? `
+                <div class="empty-state" style="grid-column: 1 / -1;">
+                    <i class="fas fa-lock"></i>
+                    <h3>Nenhum grupo criado</h3>
+                    <p>Clique em "Novo Grupo" para começar</p>
+                </div>
+            ` : permissions.map(perm => `
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3>${perm.name}</h3>
+                        <div>
+                            <button class="btn-secondary btn-sm" onclick="editPermission(${perm.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-danger btn-sm" onclick="deletePermission(${perm.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-tertiary); margin-bottom: 15px;">${perm.description || 'Sem descrição'}</p>
+                    <div>
+                        <h4 style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 10px;">Permissões:</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                            ${(perm.permissions || []).map(p => `
+                                <span class="badge badge-info">${p}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+
+        <!-- Add Permission Modal -->
+        <div class="modal" id="addPermissionModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-lock"></i> Novo Grupo de Permissões</h2>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form onsubmit="savePermission(event)">
+                        <div class="form-group">
+                            <label>Nome do Grupo</label>
+                            <input type="text" id="permissionName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Descrição</label>
+                            <textarea id="permissionDescription" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Permissões</label>
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <label><input type="checkbox" name="perm" value="view"> Visualizar</label>
+                                <label><input type="checkbox" name="perm" value="create"> Criar</label>
+                                <label><input type="checkbox" name="perm" value="edit"> Editar</label>
+                                <label><input type="checkbox" name="perm" value="delete"> Deletar</label>
+                                <label><input type="checkbox" name="perm" value="export"> Exportar</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Salvar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Change Password Page
+function renderChangePasswordPage() {
+    return `
+        <div class="page-header">
+            <h1>Alterar Senha</h1>
+        </div>
+
+        <div class="card" style="max-width: 500px;">
+            <form onsubmit="changePassword(event)">
+                <div class="form-group">
+                    <label>Senha Atual</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>Nova Senha</label>
+                    <input type="password" id="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirmar Nova Senha</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn-primary">Alterar Senha</button>
+                    <button type="button" class="btn-secondary" onclick="resetPasswordForm()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card" style="margin-top: 30px; background: var(--bg-tertiary);">
+            <h3>Requisitos de Senha</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li>Mínimo de 8 caracteres</li>
+                <li>Pelo menos uma letra maiúscula</li>
+                <li>Pelo menos uma letra minúscula</li>
+                <li>Pelo menos um número</li>
+                <li>Pelo menos um caractere especial (!@#$%)</li>
+            </ul>
+        </div>
+    `;
+}
+
+// Helper functions
+function saveUser(e) {
+    e.preventDefault();
+    alert('Usuário salvo com sucesso!');
+    closeModal('addUserModal');
+    renderPageContent('users');
+}
+
+function editUser(id) {
+    alert('Editar usuário: ' + id);
+}
+
+function deleteUser(id) {
+    if (confirm('Tem certeza que deseja deletar este usuário?')) {
+        alert('Usuário deletado!');
+        renderPageContent('users');
+    }
+}
+
+function savePermission(e) {
+    e.preventDefault();
+    alert('Grupo de permissões salvo com sucesso!');
+    closeModal('addPermissionModal');
+    renderPageContent('permissions');
+}
+
+function editPermission(id) {
+    alert('Editar permissão: ' + id);
+}
+
+function deletePermission(id) {
+    if (confirm('Tem certeza que deseja deletar este grupo?')) {
+        alert('Grupo deletado!');
+        renderPageContent('permissions');
+    }
+}
+
+function changePassword(e) {
+    e.preventDefault();
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    if (newPassword !== confirmPassword) {
+        alert('As senhas não conferem!');
+        return;
+    }
+    
+    alert('Senha alterada com sucesso!');
+    resetPasswordForm();
+}
+
+function resetPasswordForm() {
+    document.getElementById('currentPassword').value = '';
+    document.getElementById('newPassword').value = '';
+    document.getElementById('confirmPassword').value = '';
+}
