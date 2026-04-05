@@ -239,6 +239,32 @@ function closeModal(modalId) {
     }
 }
 
+// User Menu Toggle
+function toggleUserMenu() {
+    const userMenu = document.getElementById('userMenu');
+    userMenu.classList.toggle('active');
+}
+
+// Close user menu when clicking outside
+document.addEventListener('click', (e) => {
+    const userProfile = e.target.closest('.user-profile');
+    const userMenu = document.getElementById('userMenu');
+    if (!userProfile && userMenu) {
+        userMenu.classList.remove('active');
+    }
+});
+
+// Logout function
+function logout() {
+    if (confirm('Tem certeza que deseja sair?')) {
+        // Clear user session
+        localStorage.removeItem('currentUser');
+        // Redirect to login or home
+        alert('Você saiu com sucesso!');
+        location.reload();
+    }
+}
+
 // Sidebar Toggle
 const sidebarToggle = document.getElementById('sidebarToggle');
 const sidebarToggleMobile = document.getElementById('sidebarToggleMobile');

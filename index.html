@@ -97,10 +97,10 @@
                     </div>
                 </div>
 
-                <!-- Operações Section -->
+                <!-- Comercial Section -->
                 <div class="nav-section-collapsible">
                     <button class="nav-section-title" onclick="toggleNavSection(this)">
-                        <span>Operações</span>
+                        <span>Comercial</span>
                         <i class="fas fa-chevron-right"></i>
                     </button>
                     <div class="nav-section-items">
@@ -170,10 +170,21 @@
                         <i class="fas fa-bell"></i>
                         <span class="notification-badge">0</span>
                     </button>
-                    <div class="user-profile">
+                    <div class="user-profile" onclick="toggleUserMenu()">
                         <div class="avatar">JS</div>
                         <span class="user-name">João Silva</span>
                         <i class="fas fa-chevron-down"></i>
+                        <div class="user-menu" id="userMenu">
+                            <a href="#profile" class="user-menu-item" data-page="profile">
+                                <i class="fas fa-user"></i>
+                                <span>Meu Perfil</span>
+                            </a>
+                            <div class="user-menu-divider"></div>
+                            <a href="#" class="user-menu-item" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Sair</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
