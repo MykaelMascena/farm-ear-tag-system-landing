@@ -351,6 +351,36 @@ body {
     color: var(--text-primary);
 }
 
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .top-bar {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 12px 15px;
+        gap: 12px;
+    }
+
+    .search-container {
+        order: 3;
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    .top-bar-actions {
+        order: 2;
+        gap: 15px;
+        margin-left: 0;
+    }
+
+    .user-name {
+        display: none;
+    }
+
+    .user-profile {
+        gap: 8px;
+    }
+}
+
 /* Page Content */
 .page-content {
     padding: 30px;
