@@ -104,6 +104,116 @@ function renderPageContent(page) {
     attachModalListeners();
 }
 
+// Dashboard Page
+function renderDashboardPage() {
+    const animals = db.getAnimals();
+    const weights = db.getWeights();
+    const vaccines = db.getVaccines();
+    const alerts = db.getAlerts();
+    
+    const totalAnimals = animals.length;
+    const totalWeights = weights.length;
+    const totalVaccines = vaccines.length;
+    const pendingAlerts = alerts.filter(a => a.status !== 'resolved').length;
+    
+    const avgWeight = weights.length > 0 
+        ? (weights.reduce((sum, w) => sum + parseFloat(w.weight || 0), 0) / weights.length).toFixed(2)
+        : 0;
+    
+    return `
+        <div class="page-header">
+            <h1>Dashboard</h1>
+        </div>
+        
+        <div class="grid-4" style="margin-bottom: 30px;">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-cow"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>${totalAnimals}</h3>
+                    <p>Total de Animais</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="fas fa-weight"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>${avgWeight} kg</h3>
+                    <p>Peso Medio</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <i class="fas fa-syringe"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>${totalVaccines}</h3>
+                    <p>Vacinacoes</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>${pendingAlerts}</h3>
+                    <p>Alertas</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid-2">
+            <div class="card">
+                <h2>Animais Recentes</h2>
+                ${animals.length === 0 ? `
+                    <div class="empty-state" style="padding: 40px 20px;">
+                        <i class="fas fa-inbox"></i>
+                        <p>Nenhum animal cadastrado</p>
+                    </div>
+                ` : `
+                    <div class="list-group">
+                        ${animals.slice(-5).reverse().map(animal => `
+                            <div class="list-item">
+                                <div class="list-item-content">
+                                    <h4>Brinco #${animal.earTagNumber}</h4>
+                                    <p>${animal.breed} - ${animal.batch}</p>
+                                </div>
+                                <div class="list-item-badge">${animal.sex === 'male' ? 'Macho' : 'Femea'}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `}
+            </div>
+            
+            <div class="card">
+                <h2>Alertas Ativos</h2>
+                ${alerts.length === 0 ? `
+                    <div class="empty-state" style="padding: 40px 20px;">
+                        <i class="fas fa-check-circle"></i>
+                        <p>Nenhum alerta ativo</p>
+                    </div>
+                ` : `
+                    <div class="list-group">
+                        ${alerts.slice(-5).reverse().map(alert => `
+                            <div class="list-item" style="border-left: 4px solid ${alert.type === 'danger' ? '#e74c3c' : alert.type === 'warning' ? '#f39c12' : '#3498db'};">
+                                <div class="list-item-content">
+                                    <h4>${alert.title}</h4>
+                                    <p>${alert.message}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `}
+            </div>
+        </div>
+    `;
+}
+
 function attachModalListeners() {
     // Close modals when clicking outside
     document.querySelectorAll('.modal').forEach(modal => {
