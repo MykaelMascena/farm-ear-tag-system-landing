@@ -158,11 +158,13 @@ body {
 }
 
 .nav-section-items {
-    max-height: 0 !important;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
 }
 
 .nav-section-items.active {
-    max-height: 500px !important;
+    max-height: 500px;
 }
 
 .nav-item {
