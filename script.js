@@ -2,8 +2,8 @@
 function toggleNavSection(button) {
     const items = button.nextElementSibling;
     if (items && items.classList.contains('nav-section-items')) {
-        items.classList.toggle('collapsed');
-        button.classList.toggle('collapsed');
+        items.classList.toggle('active');
+        button.classList.toggle('active');
     }
 }
 
